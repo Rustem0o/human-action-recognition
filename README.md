@@ -1,4 +1,4 @@
-# video-action-recognition
+# human-action-recognition
 Recognizing human actions in short video clips with pretrained models.
 
 We compare two Kinetics-400 pretrained video models from torchvision, R(2+1)D-18 (baseline) and
@@ -72,8 +72,8 @@ In a Colab cell (on Kaggle replace `/content` with `/kaggle/working`):
 
 ```bash
 %cd /content
-!git clone https://github.com/ketrinekrutova/video-action-recognition.git
-%cd video-action-recognition
+!git clone https://github.com/Rustem0o/human-action-recognition.git
+%cd human-action-recognition
 !pip install -q -r requirements.txt
 ```
 

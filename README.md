@@ -4,7 +4,8 @@ Recognizing human actions in short video clips with pretrained models.
 We compare two Kinetics-400 pretrained video models from torchvision, R(2+1)D-18 (baseline) and
 Video Swin-T, on a 10-class subset of UCF101 (official split 1).
 
-This README currently covers the **data pipeline** (split, frame sampling, transforms, DataLoaders).
+This README covers the **data pipeline** (split, frame sampling, transforms, DataLoaders)
+and the first working **R(2+1)D-18 baseline** for the 13 Oct checkpoint.
 
 ## Classes
 
@@ -30,6 +31,7 @@ src/
 configs/ notebooks/ reports/
 scripts/
   visualize_batch.py   # saves a figure of one batch + prints average loading time per batch
+  train_baseline.py    # trains/evaluates the first R(2+1)D-18 baseline
 tests/
   test_splits.py       # split logic on fake split files
   test_data_smoke.py   # loader shapes on tiny synthetic .avi files (tests only)
@@ -128,6 +130,31 @@ check tensor shapes and are never used for reported results.
 !python scripts/visualize_batch.py --video-root data/UCF-101 --split-csv splits/split01_seed42.csv --split train --sampling uniform --out results/figures/batch_train_uniform.png
 !python scripts/visualize_batch.py --video-root data/UCF-101 --split-csv splits/split01_seed42.csv --split val --sampling contiguous --out results/figures/batch_val_contiguous.png
 ```
+
+### 4. Train the first baseline
+
+The first checkpoint baseline uses torchvision's R(2+1)D-18 video classifier.
+By default, it loads Kinetics-400 pretrained weights, replaces the classifier
+with a 10-class head, freezes the backbone, and trains only the final layer.
+
+```bash
+!python scripts/train_baseline.py \
+  --video-root data/UCF-101 \
+  --split-csv splits/split01_seed42.csv \
+  --epochs 3 \
+  --batch-size 8 \
+  --num-workers 2 \
+  --out results/metrics/baseline_r2plus1d18.json
+```
+
+The script saves JSON metrics and a confusion matrix CSV in `results/metrics/`.
+Use `--no-pretrained` only for offline debugging when pretrained weights cannot
+be downloaded.
+
+## 13 Oct checkpoint
+
+See `reports/progress_2026-10-13.md` for the first checkpoint summary: data
+pipeline, split, baseline configuration, initial checks, and current blocker.
 
 ## Using the DataLoaders
 

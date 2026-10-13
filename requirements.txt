@@ -1,1 +1,7 @@
-
+# torch/torchvision are preinstalled with CUDA on Colab and Kaggle; these lower bounds keep that install.
+torch>=2.0
+torchvision>=0.15
+opencv-python-headless>=4.8
+numpy>=1.24
+matplotlib>=3.7
+pytest>=7.0

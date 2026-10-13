@@ -234,3 +234,12 @@ venv/
 *.pt
 *.ckpt
 data/raw/
+
+# Project: dataset (repo-root data/ only, not src/data/), videos, archives, checkpoints
+/data/
+*.avi
+*.rar
+results/checkpoints/
+
+# IDE
+.idea/

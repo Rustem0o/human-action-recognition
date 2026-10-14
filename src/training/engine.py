@@ -23,6 +23,12 @@ def train_one_epoch(model, loader, optimizer, device, criterion=None) -> EpochRe
     """Train for one epoch and return average loss/accuracy."""
     criterion = criterion or torch.nn.CrossEntropyLoss()
     model.train()
+    # requires_grad=False does not freeze BatchNorm running statistics.
+    # Preserve the pretrained backbone while its classifier is being trained.
+    for module in model.modules():
+        if isinstance(module, torch.nn.modules.batchnorm._BatchNorm):
+            if module.affine and not any(p.requires_grad for p in module.parameters()):
+                module.eval()
     start = time.perf_counter()
     total_loss = 0.0
     total_correct = 0
@@ -43,6 +49,8 @@ def train_one_epoch(model, loader, optimizer, device, criterion=None) -> EpochRe
         total_correct += int((logits.argmax(dim=1) == labels).sum().item())
         total_seen += batch_size
 
+    if total_seen == 0:
+        raise ValueError("Training loader is empty")
     seconds = time.perf_counter() - start
     return EpochResult(total_loss / total_seen, total_correct / total_seen, seconds)
 
@@ -73,6 +81,8 @@ def evaluate(model, loader, device, criterion=None) -> tuple[EpochResult, torch.
         predictions.append(pred.cpu())
         targets.append(labels.cpu())
 
+    if total_seen == 0:
+        raise ValueError("Evaluation loader is empty")
     seconds = time.perf_counter() - start
     result = EpochResult(total_loss / total_seen, total_correct / total_seen, seconds)
     return result, torch.cat(predictions), torch.cat(targets)

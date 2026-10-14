@@ -182,3 +182,19 @@ for videos, labels in train_loader:   # videos: (B, 3, 16, 112, 112) float32, la
 - For Video Swin-T, pass its preset so preprocessing matches that model:
   `build_dataloaders(..., weights=torchvision.models.video.Swin3D_T_Weights.KINETICS400_V1)`.
   The default (`weights=None`) uses the R(2+1)D-18 preset.
+
+
+## Baseline results
+
+Validation on 214 videos from the 10-class UCF101 subset, with a frozen
+Kinetics-400 pretrained R(2+1)D-18 backbone and a trained classifier head.
+
+| Training epochs | Selected epoch | Validation accuracy | Macro-F1 | Validation loss |
+|---:|---:|---:|---:|---:|
+| [3](results/metrics/baseline_r2plus1d18.json) | 3 | 95.79% (205/214) | 0.9531 | 0.2723 |
+| [10](results/metrics/baseline_r2plus1d18_10epochs.json) | 9 | 95.79% (205/214) | 0.9529 | 0.1769 |
+
+The test set was not evaluated.
+
+[Learning curves](results/figures/baseline_r2plus1d18_10epochs_learning_curves.png)
+· [Validation confusion matrix](results/figures/baseline_r2plus1d18_10epochs_val_confusion.png)

@@ -240,6 +240,8 @@ data/raw/
 *.avi
 *.rar
 results/checkpoints/
+.downloads/
+.venv-gpu/
 
 # IDE
 .idea/

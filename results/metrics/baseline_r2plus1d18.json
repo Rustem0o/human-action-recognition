@@ -1,0 +1,98 @@
+{
+  "model": "r2plus1d_18",
+  "pretrained": true,
+  "weights": "R2Plus1D_18_Weights.KINETICS400_V1",
+  "freeze_backbone": true,
+  "classes": [
+    "Basketball",
+    "BasketballDunk",
+    "BodyWeightSquats",
+    "BreastStroke",
+    "FrontCrawl",
+    "JumpingJack",
+    "Lunges",
+    "PlayingGuitar",
+    "PlayingSitar",
+    "PushUps"
+  ],
+  "config": {
+    "video_root": "data/UCF-101",
+    "split_csv": "splits/split01_seed42.csv",
+    "epochs": 3,
+    "batch_size": 4,
+    "num_workers": 2,
+    "num_frames": 16,
+    "sampling": "uniform",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 42,
+    "device": "cuda",
+    "cpu_threads": 8,
+    "no_pretrained": false,
+    "unfreeze_backbone": false,
+    "evaluate_test": false,
+    "out": "results/metrics/baseline_r2plus1d18.json",
+    "confusion_out": "results/metrics/baseline_r2plus1d18_val_confusion.csv",
+    "predictions_out": "results/metrics/baseline_r2plus1d18_val_predictions.csv",
+    "checkpoint_out": "results/checkpoints/baseline_r2plus1d18_best.pt"
+  },
+  "device": "cuda",
+  "environment": {
+    "python": "3.13.7",
+    "torch": "2.8.0+cu128",
+    "torchvision": "0.23.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+  },
+  "split_sha256": "70b9aec00d82f84bcd03ee9b2e7c556b0699712b62d753f628d9b1918c5dfa56",
+  "split_sizes": {
+    "train": 712,
+    "val": 214,
+    "test": 358
+  },
+  "selection": "highest val_accuracy, then lowest val_loss",
+  "checkpoint": "results/checkpoints/baseline_r2plus1d18_best.pt",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.1227652697583264,
+      "train_accuracy": 0.6952247191011236,
+      "train_seconds": 13.039044448999903,
+      "val_loss": 0.5617838019383288,
+      "val_accuracy": 0.8878504672897196,
+      "val_macro_f1": 0.8705543176091703,
+      "val_seconds": 3.9472430069999973
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.33902659890859316,
+      "train_accuracy": 0.9634831460674157,
+      "train_seconds": 12.479203161999976,
+      "val_loss": 0.4045008754479551,
+      "val_accuracy": 0.8738317757009346,
+      "val_macro_f1": 0.8619866075618786,
+      "val_seconds": 3.9245325489998777
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.19751253592248044,
+      "train_accuracy": 0.973314606741573,
+      "train_seconds": 12.51821841900005,
+      "val_loss": 0.2723149906443519,
+      "val_accuracy": 0.9579439252336449,
+      "val_macro_f1": 0.9530696430527295,
+      "val_seconds": 3.9788362229999166
+    }
+  ],
+  "best_val_epoch": {
+    "epoch": 3,
+    "train_loss": 0.19751253592248044,
+    "train_accuracy": 0.973314606741573,
+    "train_seconds": 12.51821841900005,
+    "val_loss": 0.2723149906443519,
+    "val_accuracy": 0.9579439252336449,
+    "val_macro_f1": 0.9530696430527295,
+    "val_seconds": 3.9788362229999166
+  },
+  "test": null,
+  "status": "completed"
+}

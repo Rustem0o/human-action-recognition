@@ -34,3 +34,31 @@ def test_evaluate_tiny_loader():
     assert result.accuracy == 1.0
     assert pred.tolist() == [0, 1]
     assert target.tolist() == [0, 1]
+
+
+def test_frozen_batchnorm_stats_stay_fixed_while_head_learns():
+    from src.training import train_one_epoch
+
+    torch.manual_seed(3)
+    model = torch.nn.Sequential(torch.nn.BatchNorm1d(3), torch.nn.Linear(3, 2))
+    for parameter in model[0].parameters():
+        parameter.requires_grad = False
+    before_mean = model[0].running_mean.clone()
+    before_var = model[0].running_var.clone()
+    before_head = model[1].weight.detach().clone()
+    optimizer = torch.optim.SGD(model[1].parameters(), lr=0.1)
+    train_one_epoch(model, [(torch.randn(8, 3) + 10, torch.zeros(8, dtype=torch.long))],
+                    optimizer, torch.device('cpu'))
+    assert torch.equal(model[0].running_mean, before_mean)
+    assert torch.equal(model[0].running_var, before_var)
+    assert not torch.equal(model[1].weight, before_head)
+
+
+def test_unfrozen_batchnorm_updates_statistics():
+    from src.training import train_one_epoch
+
+    model = torch.nn.Sequential(torch.nn.BatchNorm1d(3), torch.nn.Linear(3, 2))
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+    train_one_epoch(model, [(torch.ones(4, 3) * 5, torch.zeros(4, dtype=torch.long))],
+                    optimizer, torch.device('cpu'))
+    assert model[0].running_mean.sum() > 0

@@ -17,13 +17,14 @@ from pathlib import Path
 
 import torch
 import torchvision
+from torchvision.models.video import R2Plus1D_18_Weights, Swin3D_T_Weights
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.data import build_dataloaders, get_preset  # noqa: E402
+from src.data import build_dataloaders  # noqa: E402
 from src.data.splits import assert_no_group_overlap, check_files_exist, read_csv  # noqa: E402
 from src.evaluation import confusion_matrix, macro_f1_from_confusion  # noqa: E402
-from src.models import build_r2plus1d18  # noqa: E402
+from src.models import build_r2plus1d18, build_video_swin_t  # noqa: E402
 from src.training import evaluate, train_one_epoch  # noqa: E402
 
 
@@ -36,6 +37,8 @@ def positive_int(value):
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--model", choices=["r2plus1d18", "video_swin_t"], default="r2plus1d18",
+                        help="video architecture to train")
     parser.add_argument("--video-root", default="data/UCF-101")
     parser.add_argument("--split-csv", default="splits/split01_seed42.csv")
     parser.add_argument("--epochs", type=positive_int, default=3)
@@ -102,39 +105,40 @@ def main(argv=None):
     required = {"train", "val", "test"} if args.evaluate_test else {"train", "val"}
     check_files_exist([row for row in rows if row["split"] in required], args.video_root)
 
+    model_builders = {"r2plus1d18": build_r2plus1d18, "video_swin_t": build_video_swin_t}
+    weights_presets = {"r2plus1d18": R2Plus1D_18_Weights.KINETICS400_V1,
+                       "video_swin_t": Swin3D_T_Weights.KINETICS400_V1}
+    model_name = args.model
+    file_stem = "baseline_video_swin_t" if model_name == "video_swin_t" else "baseline_r2plus1d18"
+    # Preserve explicit user paths; only switch the defaults when Swin is selected.
+    if model_name == "video_swin_t":
+        if args.out == "results/metrics/baseline_r2plus1d18.json":
+            args.out = f"results/metrics/{file_stem}.json"
+        if args.confusion_out == "results/metrics/baseline_r2plus1d18_val_confusion.csv":
+            args.confusion_out = f"results/metrics/{file_stem}_val_confusion.csv"
+        if args.predictions_out == "results/metrics/baseline_r2plus1d18_val_predictions.csv":
+            args.predictions_out = f"results/metrics/{file_stem}_val_predictions.csv"
+        if args.checkpoint_out == "results/checkpoints/baseline_r2plus1d18_best.pt":
+            args.checkpoint_out = f"results/checkpoints/{file_stem}_best.pt"
+
     train_loader, val_loader, test_loader, names = build_dataloaders(
         video_root=args.video_root, split_csv=args.split_csv, sampling=args.sampling,
         num_frames=args.num_frames, batch_size=args.batch_size,
-        num_workers=args.num_workers, seed=args.seed,
+        num_workers=args.num_workers, seed=args.seed, weights=weights_presets[model_name],
     )
-    model = build_r2plus1d18(len(names), pretrained=not args.no_pretrained,
-                            freeze_backbone=not args.unfreeze_backbone).to(device)
+    model = model_builders[model_name](len(names), pretrained=not args.no_pretrained,
+                                      freeze_backbone=not args.unfreeze_backbone).to(device)
     optimizer = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad],
                                  lr=args.lr, weight_decay=args.weight_decay)
     checkpoint_path = Path(args.checkpoint_out)
     checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
     output = {
-        "model": "r2plus1d_18", "pretrained": not args.no_pretrained,
-        "weights": None if args.no_pretrained else "R2Plus1D_18_Weights.KINETICS400_V1",
+        "model": model_name, "pretrained": not args.no_pretrained,
+        "weights": None if args.no_pretrained else f"{weights_presets[model_name].__class__.__name__}.KINETICS400_V1",
         "freeze_backbone": not args.unfreeze_backbone, "classes": names,
         "config": vars(args), "device": str(device),
-        "training": {
-            "loss": "CrossEntropyLoss",
-            "optimizer": {"name": "AdamW", **optimizer.defaults},
-            "preprocessing": get_preset(),
-            "train_spatial_transform": "random_crop_and_horizontal_flip",
-            "validation_spatial_transform": "center_crop",
-            "train_temporal_transform": "random_window" if args.sampling == "contiguous" else "uniform_full_clip",
-            "validation_temporal_transform": "center_window" if args.sampling == "contiguous" else "uniform_full_clip",
-            "trainable_parameters": sum(p.numel() for p in model.parameters() if p.requires_grad),
-            "total_parameters": sum(p.numel() for p in model.parameters()),
-            "cudnn_deterministic": torch.backends.cudnn.deterministic,
-            "cudnn_benchmark": torch.backends.cudnn.benchmark,
-            "python_hash_seed": os.environ.get("PYTHONHASHSEED"),
-        },
         "environment": {"python": platform.python_version(), "torch": str(torch.__version__),
                         "torchvision": str(torchvision.__version__),
-                        "cuda": torch.version.cuda,
                         "gpu": torch.cuda.get_device_name(device) if device.type == "cuda" else None},
         "split_sha256": hashlib.sha256(Path(args.split_csv).read_bytes()).hexdigest(),
         "split_sizes": {split: sum(row["split"] == split for row in rows) for split in ("train", "val", "test")},

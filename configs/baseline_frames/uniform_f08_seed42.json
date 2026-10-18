@@ -1,0 +1,83 @@
+{
+  "run_id": "uniform_f08_seed42",
+  "args": {
+    "video_root": "data/UCF-101",
+    "split_csv": "splits/split01_seed42.csv",
+    "epochs": 10,
+    "batch_size": 4,
+    "num_workers": 2,
+    "num_frames": 8,
+    "sampling": "uniform",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 42,
+    "device": "cuda",
+    "cpu_threads": 8,
+    "no_pretrained": false,
+    "unfreeze_backbone": false,
+    "evaluate_test": false,
+    "out": "results/experiments/baseline_frames/uniform_f08_seed42/metrics.json",
+    "confusion_out": "results/experiments/baseline_frames/uniform_f08_seed42/val_confusion.csv",
+    "predictions_out": "results/experiments/baseline_frames/uniform_f08_seed42/val_predictions.csv",
+    "checkpoint_out": "results/checkpoints/baseline_frames/uniform_f08_seed42_best.pt"
+  },
+  "model": "r2plus1d_18",
+  "weights": "R2Plus1D_18_Weights.KINETICS400_V1",
+  "trainable": "fc only; backbone parameters and BatchNorm statistics frozen",
+  "loss": "CrossEntropyLoss",
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "amsgrad": false
+  },
+  "preprocessing": {
+    "resize_size": [
+      128,
+      171
+    ],
+    "crop_size": [
+      112,
+      112
+    ],
+    "mean": [
+      0.43216,
+      0.394666,
+      0.37645
+    ],
+    "std": [
+      0.22803,
+      0.22145,
+      0.216989
+    ],
+    "train_spatial": "random crop and horizontal flip, shared across frames",
+    "validation_spatial": "center crop",
+    "train_temporal": "evenly spaced across full clip",
+    "validation_temporal": "evenly spaced across full clip",
+    "short_clip_padding": "repeat last frame",
+    "resize_interpolation": "bilinear, antialias=True, float input in [0,1]"
+  },
+  "data": {
+    "split_sha256": "70b9aec00d82f84bcd03ee9b2e7c556b0699712b62d753f628d9b1918c5dfa56",
+    "train_clips": 712,
+    "validation_clips": 214,
+    "test_evaluated": false
+  },
+  "selection": "highest validation accuracy, then lowest validation loss",
+  "source_base_commit": "bd94ae8c1fb50a545a6ce01b07d826b7a0e2c9bd",
+  "source_sha256": {
+    "scripts/run_frame_ablation.py": "bb30e6696833f3bfcaaa2c36c94469f7431d3ad21cda43744b81a0413509f19c",
+    "scripts/train_baseline.py": "f31fb7561df83c4b7ce0b1009aee534d1b7a040f46d433967d77d848b425fc48",
+    "src/data/dataset.py": "fa3c6e914fd65336ee70170ab72d8d78836560bb580ae77eafaaaebf90f138c9",
+    "src/data/splits.py": "d6714554a0e5f136db875f39da0ee3e4c3a40e1113496ffaf2466103aff012c9",
+    "src/models/video_classifiers.py": "ad6a276077a78aba74135e5ed2906dc42381e84e0e456c7c5c146cd6febda304",
+    "src/training/engine.py": "f153d5f338c52ba5cb086cbce7fb3ec152b4ba7e4b9dab48713cd1a7a7ee3f4f",
+    "src/evaluation/metrics.py": "9990022e6f5b040882622287f02032c38a94d2c9922e512bb740ee008e6519e0"
+  },
+  "log": "results/experiments/baseline_frames/uniform_f08_seed42/training.log"
+}

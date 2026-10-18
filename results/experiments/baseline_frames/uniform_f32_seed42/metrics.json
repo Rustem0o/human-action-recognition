@@ -1,0 +1,218 @@
+{
+  "model": "r2plus1d_18",
+  "pretrained": true,
+  "weights": "R2Plus1D_18_Weights.KINETICS400_V1",
+  "freeze_backbone": true,
+  "classes": [
+    "Basketball",
+    "BasketballDunk",
+    "BodyWeightSquats",
+    "BreastStroke",
+    "FrontCrawl",
+    "JumpingJack",
+    "Lunges",
+    "PlayingGuitar",
+    "PlayingSitar",
+    "PushUps"
+  ],
+  "config": {
+    "video_root": "data/UCF-101",
+    "split_csv": "splits/split01_seed42.csv",
+    "epochs": 10,
+    "batch_size": 4,
+    "num_workers": 2,
+    "num_frames": 32,
+    "sampling": "uniform",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 42,
+    "device": "cuda",
+    "cpu_threads": 8,
+    "no_pretrained": false,
+    "unfreeze_backbone": false,
+    "evaluate_test": false,
+    "out": "results/experiments/baseline_frames/uniform_f32_seed42/metrics.json",
+    "confusion_out": "results/experiments/baseline_frames/uniform_f32_seed42/val_confusion.csv",
+    "predictions_out": "results/experiments/baseline_frames/uniform_f32_seed42/val_predictions.csv",
+    "checkpoint_out": "results/checkpoints/baseline_frames/uniform_f32_seed42_best.pt"
+  },
+  "device": "cuda",
+  "training": {
+    "loss": "CrossEntropyLoss",
+    "optimizer": {
+      "name": "AdamW",
+      "lr": 0.001,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0001,
+      "amsgrad": false,
+      "maximize": false,
+      "foreach": null,
+      "capturable": false,
+      "differentiable": false,
+      "fused": null,
+      "decoupled_weight_decay": true
+    },
+    "preprocessing": {
+      "resize_size": [
+        128,
+        171
+      ],
+      "crop_size": [
+        112,
+        112
+      ],
+      "mean": [
+        0.43216,
+        0.394666,
+        0.37645
+      ],
+      "std": [
+        0.22803,
+        0.22145,
+        0.216989
+      ]
+    },
+    "train_spatial_transform": "random_crop_and_horizontal_flip",
+    "validation_spatial_transform": "center_crop",
+    "train_temporal_transform": "uniform_full_clip",
+    "validation_temporal_transform": "uniform_full_clip",
+    "trainable_parameters": 5130,
+    "total_parameters": 31305255,
+    "cudnn_deterministic": true,
+    "cudnn_benchmark": false,
+    "python_hash_seed": "42"
+  },
+  "environment": {
+    "python": "3.13.7",
+    "torch": "2.8.0+cu128",
+    "torchvision": "0.23.0+cu128",
+    "cuda": "12.8",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+  },
+  "split_sha256": "70b9aec00d82f84bcd03ee9b2e7c556b0699712b62d753f628d9b1918c5dfa56",
+  "split_sizes": {
+    "train": 712,
+    "val": 214,
+    "test": 358
+  },
+  "selection": "highest val_accuracy, then lowest val_loss",
+  "checkpoint": "results/checkpoints/baseline_frames/uniform_f32_seed42_best.pt",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.0872745180732748,
+      "train_accuracy": 0.7134831460674157,
+      "train_seconds": 27.380134238999972,
+      "val_loss": 0.5050443891331414,
+      "val_accuracy": 0.9205607476635514,
+      "val_macro_f1": 0.9062959259599246,
+      "val_seconds": 8.305514013999982
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.3041224620315466,
+      "train_accuracy": 0.973314606741573,
+      "train_seconds": 27.432284047000053,
+      "val_loss": 0.3552092371038466,
+      "val_accuracy": 0.9065420560747663,
+      "val_macro_f1": 0.8931097178683386,
+      "val_seconds": 8.52378283600001
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.16813689122876424,
+      "train_accuracy": 0.9887640449438202,
+      "train_seconds": 27.625156526999945,
+      "val_loss": 0.23030451638188876,
+      "val_accuracy": 0.9532710280373832,
+      "val_macro_f1": 0.945390336466501,
+      "val_seconds": 8.415786758999957
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.10960931949359312,
+      "train_accuracy": 0.9901685393258427,
+      "train_seconds": 27.848091570000065,
+      "val_loss": 0.1987080950916649,
+      "val_accuracy": 0.9579439252336449,
+      "val_macro_f1": 0.9522443098259045,
+      "val_seconds": 8.552472297000008
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.080796229987918,
+      "train_accuracy": 0.9957865168539326,
+      "train_seconds": 27.65225199400004,
+      "val_loss": 0.18074530922311627,
+      "val_accuracy": 0.9579439252336449,
+      "val_macro_f1": 0.9527657417135627,
+      "val_seconds": 8.828549370000019
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.06494391185304757,
+      "train_accuracy": 0.9957865168539326,
+      "train_seconds": 27.838414101000126,
+      "val_loss": 0.16078062805730117,
+      "val_accuracy": 0.9672897196261683,
+      "val_macro_f1": 0.962604356283512,
+      "val_seconds": 8.565956948999883
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.05183511371515022,
+      "train_accuracy": 0.9943820224719101,
+      "train_seconds": 27.661229295000112,
+      "val_loss": 0.15417745431872068,
+      "val_accuracy": 0.9719626168224299,
+      "val_macro_f1": 0.968052384957347,
+      "val_seconds": 8.541157298999906
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.050047764841079964,
+      "train_accuracy": 0.9943820224719101,
+      "train_seconds": 27.608631437999975,
+      "val_loss": 0.13664999390978402,
+      "val_accuracy": 0.9672897196261683,
+      "val_macro_f1": 0.962604356283512,
+      "val_seconds": 8.48314838400006
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.035990466643648036,
+      "train_accuracy": 0.9971910112359551,
+      "train_seconds": 27.850408075999894,
+      "val_loss": 0.1364935279941343,
+      "val_accuracy": 0.9579439252336449,
+      "val_macro_f1": 0.9516484154637463,
+      "val_seconds": 8.642709430999957
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.03260478201542008,
+      "train_accuracy": 0.9971910112359551,
+      "train_seconds": 27.866732086999946,
+      "val_loss": 0.13310599829631675,
+      "val_accuracy": 0.9626168224299065,
+      "val_macro_f1": 0.9576101634844412,
+      "val_seconds": 8.510517276999963
+    }
+  ],
+  "best_val_epoch": {
+    "epoch": 7,
+    "train_loss": 0.05183511371515022,
+    "train_accuracy": 0.9943820224719101,
+    "train_seconds": 27.661229295000112,
+    "val_loss": 0.15417745431872068,
+    "val_accuracy": 0.9719626168224299,
+    "val_macro_f1": 0.968052384957347,
+    "val_seconds": 8.541157298999906
+  },
+  "test": null,
+  "status": "completed"
+}

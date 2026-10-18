@@ -198,3 +198,32 @@ The test set was not evaluated.
 
 [Learning curves](results/figures/baseline_r2plus1d18_10epochs_learning_curves.png)
 · [Validation confusion matrix](results/figures/baseline_r2plus1d18_10epochs_val_confusion.png)
+
+
+## Frame sampling comparison
+
+Frozen Kinetics-400 pretrained R(2+1)D-18 backbone, 10 training epochs, batch size 4,
+learning rate 0.001, weight decay 0.0001, seed 42; the same 712 train / 214 validation clips.
+Uniform sampling spans the full video. Contiguous sampling uses a random consecutive
+window for training and a centered window for validation.
+
+| Frames | Sampling | Selected epoch | Validation accuracy | Macro-F1 | Validation loss |
+|---:|---|---:|---:|---:|---:|
+| 8 | uniform | 5 | 94.39% | 0.9391 | 0.2390 |
+| 16 | uniform | 9 | 95.79% | 0.9529 | 0.1769 |
+| 32 | uniform | 7 | 97.20% | 0.9681 | 0.1542 |
+| 8 | contiguous | 9 | 92.52% | 0.9198 | 0.2183 |
+| 16 | contiguous | 9 | 93.93% | 0.9305 | 0.1943 |
+| 32 | contiguous | 3 | 95.33% | 0.9456 | 0.2642 |
+
+Uniform sampling improved accuracy by 1.87 percentage points over contiguous sampling
+at each frame count. Increasing uniform sampling from 16 to 32 frames added 1.40
+percentage points, with 2.16 times the measured training time.
+
+Selected: **32 frames, uniform** — **97.20% (208/214)** accuracy,
+macro-F1 **0.9681**, validation loss **0.1542**.
+Selection uses highest validation accuracy, then lowest validation loss. The test set was not evaluated.
+
+[Per-run configurations](configs/baseline_frames/) · [Logs, metrics and predictions](results/experiments/baseline_frames/) ·
+[Summary](results/experiments/baseline_frames/summary.csv) · [Comparison plot](results/figures/baseline_frames/comparison.png) ·
+[Selected validation confusion matrix](results/figures/baseline_frames/best_val_confusion.png)

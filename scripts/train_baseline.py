@@ -20,7 +20,7 @@ import torchvision
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.data import build_dataloaders  # noqa: E402
+from src.data import build_dataloaders, get_preset  # noqa: E402
 from src.data.splits import assert_no_group_overlap, check_files_exist, read_csv  # noqa: E402
 from src.evaluation import confusion_matrix, macro_f1_from_confusion  # noqa: E402
 from src.models import build_r2plus1d18  # noqa: E402
@@ -118,8 +118,23 @@ def main(argv=None):
         "weights": None if args.no_pretrained else "R2Plus1D_18_Weights.KINETICS400_V1",
         "freeze_backbone": not args.unfreeze_backbone, "classes": names,
         "config": vars(args), "device": str(device),
+        "training": {
+            "loss": "CrossEntropyLoss",
+            "optimizer": {"name": "AdamW", **optimizer.defaults},
+            "preprocessing": get_preset(),
+            "train_spatial_transform": "random_crop_and_horizontal_flip",
+            "validation_spatial_transform": "center_crop",
+            "train_temporal_transform": "random_window" if args.sampling == "contiguous" else "uniform_full_clip",
+            "validation_temporal_transform": "center_window" if args.sampling == "contiguous" else "uniform_full_clip",
+            "trainable_parameters": sum(p.numel() for p in model.parameters() if p.requires_grad),
+            "total_parameters": sum(p.numel() for p in model.parameters()),
+            "cudnn_deterministic": torch.backends.cudnn.deterministic,
+            "cudnn_benchmark": torch.backends.cudnn.benchmark,
+            "python_hash_seed": os.environ.get("PYTHONHASHSEED"),
+        },
         "environment": {"python": platform.python_version(), "torch": str(torch.__version__),
                         "torchvision": str(torchvision.__version__),
+                        "cuda": torch.version.cuda,
                         "gpu": torch.cuda.get_device_name(device) if device.type == "cuda" else None},
         "split_sha256": hashlib.sha256(Path(args.split_csv).read_bytes()).hexdigest(),
         "split_sizes": {split: sum(row["split"] == split for row in rows) for split in ("train", "val", "test")},

@@ -1,0 +1,102 @@
+{
+  "selection": "highest validation accuracy, then lowest validation loss",
+  "test_evaluated": false,
+  "controlled_parameters": {
+    "epochs": 10,
+    "batch_size": 4,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 42,
+    "train_clips": 712,
+    "validation_clips": 214
+  },
+  "best_run": "uniform_f32_seed42",
+  "sampling_comparisons": [
+    {
+      "num_frames": 8,
+      "uniform_minus_contiguous_accuracy_pp": 1.869158878504673,
+      "uniform_minus_contiguous_macro_f1": 0.01927216987794067,
+      "uniform_minus_contiguous_val_loss": 0.020678425487348467
+    },
+    {
+      "num_frames": 16,
+      "uniform_minus_contiguous_accuracy_pp": 1.869158878504673,
+      "uniform_minus_contiguous_macro_f1": 0.02234683227828871,
+      "uniform_minus_contiguous_val_loss": -0.01738025517709918
+    },
+    {
+      "num_frames": 32,
+      "uniform_minus_contiguous_accuracy_pp": 1.869158878504673,
+      "uniform_minus_contiguous_macro_f1": 0.022501916843211567,
+      "uniform_minus_contiguous_val_loss": -0.10998365793825413
+    }
+  ],
+  "frame_count_comparisons": [
+    {
+      "sampling": "uniform",
+      "from_frames": 8,
+      "to_frames": 16,
+      "accuracy_change_pp": 1.4018691588785104,
+      "macro_f1_change": 0.013773630365370382,
+      "training_time_ratio": 1.6733883330048398
+    },
+    {
+      "sampling": "uniform",
+      "from_frames": 16,
+      "to_frames": 32,
+      "accuracy_change_pp": 1.4018691588784993,
+      "macro_f1_change": 0.01519677545057474,
+      "training_time_ratio": 2.158187072657272
+    },
+    {
+      "sampling": "uniform",
+      "from_frames": 8,
+      "to_frames": 32,
+      "accuracy_change_pp": 2.8037383177570097,
+      "macro_f1_change": 0.02897040581594512,
+      "training_time_ratio": 3.611485067826547
+    },
+    {
+      "sampling": "contiguous",
+      "from_frames": 8,
+      "to_frames": 16,
+      "accuracy_change_pp": 1.4018691588785104,
+      "macro_f1_change": 0.010698967965022343,
+      "training_time_ratio": 1.8320982779369845
+    },
+    {
+      "sampling": "contiguous",
+      "from_frames": 16,
+      "to_frames": 32,
+      "accuracy_change_pp": 1.4018691588784993,
+      "macro_f1_change": 0.015041690885651882,
+      "training_time_ratio": 2.1335181401143197
+    },
+    {
+      "sampling": "contiguous",
+      "from_frames": 8,
+      "to_frames": 32,
+      "accuracy_change_pp": 2.8037383177570097,
+      "macro_f1_change": 0.025740658850674225,
+      "training_time_ratio": 3.9088149104507632
+    }
+  ],
+  "validation_video_statistics": {
+    "clips": 214,
+    "min_frames": 49,
+    "median_frames": 149.5,
+    "max_frames": 528,
+    "median_fps": 25.0,
+    "median_duration_seconds": 5.96,
+    "contiguous_median_temporal_coverage": {
+      "8": 0.04713858153455469,
+      "16": 0.10101124614547433,
+      "32": 0.20875657536731362
+    },
+    "clips_requiring_last_frame_padding": {
+      "8": 0,
+      "16": 0,
+      "32": 0
+    }
+  }
+}

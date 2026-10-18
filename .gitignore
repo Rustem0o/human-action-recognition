@@ -242,6 +242,7 @@ data/raw/
 results/checkpoints/
 .downloads/
 .venv-gpu/
+!results/experiments/baseline_frames/*/training.log
 
 # IDE
 .idea/

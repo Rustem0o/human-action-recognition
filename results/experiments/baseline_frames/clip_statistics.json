@@ -1,0 +1,41 @@
+{
+  "test_included": false,
+  "splits": {
+    "train": {
+      "clips": 712,
+      "min_frames": 29,
+      "median_frames": 138.0,
+      "max_frames": 641,
+      "median_fps": 25.0,
+      "median_duration_seconds": 5.4,
+      "contiguous_median_temporal_coverage": {
+        "8": 0.051094890510948905,
+        "16": 0.10948905109489052,
+        "32": 0.22627737226277372
+      },
+      "clips_requiring_last_frame_padding": {
+        "8": 0,
+        "16": 0,
+        "32": 1
+      }
+    },
+    "val": {
+      "clips": 214,
+      "min_frames": 49,
+      "median_frames": 149.5,
+      "max_frames": 528,
+      "median_fps": 25.0,
+      "median_duration_seconds": 5.96,
+      "contiguous_median_temporal_coverage": {
+        "8": 0.04713858153455469,
+        "16": 0.10101124614547433,
+        "32": 0.20875657536731362
+      },
+      "clips_requiring_last_frame_padding": {
+        "8": 0,
+        "16": 0,
+        "32": 0
+      }
+    }
+  }
+}

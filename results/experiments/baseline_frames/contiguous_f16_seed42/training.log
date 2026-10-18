@@ -1,0 +1,99 @@
+COMMAND: /home/zakhar/Documents/CV/human-action-recognition/.venv-gpu/bin/python -u scripts/train_baseline.py --video-root data/UCF-101 --split-csv splits/split01_seed42.csv --epochs 10 --batch-size 4 --num-workers 2 --num-frames 16 --sampling contiguous --lr 0.001 --weight-decay 0.0001 --seed 42 --device cuda --cpu-threads 8 --out results/experiments/baseline_frames/contiguous_f16_seed42/metrics.json --confusion-out results/experiments/baseline_frames/contiguous_f16_seed42/val_confusion.csv --predictions-out results/experiments/baseline_frames/contiguous_f16_seed42/val_predictions.csv --checkpoint-out results/checkpoints/baseline_frames/contiguous_f16_seed42_best.pt
+CONFIG:
+{
+  "run_id": "contiguous_f16_seed42",
+  "args": {
+    "video_root": "data/UCF-101",
+    "split_csv": "splits/split01_seed42.csv",
+    "epochs": 10,
+    "batch_size": 4,
+    "num_workers": 2,
+    "num_frames": 16,
+    "sampling": "contiguous",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 42,
+    "device": "cuda",
+    "cpu_threads": 8,
+    "no_pretrained": false,
+    "unfreeze_backbone": false,
+    "evaluate_test": false,
+    "out": "results/experiments/baseline_frames/contiguous_f16_seed42/metrics.json",
+    "confusion_out": "results/experiments/baseline_frames/contiguous_f16_seed42/val_confusion.csv",
+    "predictions_out": "results/experiments/baseline_frames/contiguous_f16_seed42/val_predictions.csv",
+    "checkpoint_out": "results/checkpoints/baseline_frames/contiguous_f16_seed42_best.pt"
+  },
+  "model": "r2plus1d_18",
+  "weights": "R2Plus1D_18_Weights.KINETICS400_V1",
+  "trainable": "fc only; backbone parameters and BatchNorm statistics frozen",
+  "loss": "CrossEntropyLoss",
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "amsgrad": false
+  },
+  "preprocessing": {
+    "resize_size": [
+      128,
+      171
+    ],
+    "crop_size": [
+      112,
+      112
+    ],
+    "mean": [
+      0.43216,
+      0.394666,
+      0.37645
+    ],
+    "std": [
+      0.22803,
+      0.22145,
+      0.216989
+    ],
+    "train_spatial": "random crop and horizontal flip, shared across frames",
+    "validation_spatial": "center crop",
+    "train_temporal": "random consecutive window",
+    "validation_temporal": "centered consecutive window",
+    "short_clip_padding": "repeat last frame",
+    "resize_interpolation": "bilinear, antialias=True, float input in [0,1]"
+  },
+  "data": {
+    "split_sha256": "70b9aec00d82f84bcd03ee9b2e7c556b0699712b62d753f628d9b1918c5dfa56",
+    "train_clips": 712,
+    "validation_clips": 214,
+    "test_evaluated": false
+  },
+  "selection": "highest validation accuracy, then lowest validation loss",
+  "source_base_commit": "bd94ae8c1fb50a545a6ce01b07d826b7a0e2c9bd",
+  "source_sha256": {
+    "scripts/run_frame_ablation.py": "bb30e6696833f3bfcaaa2c36c94469f7431d3ad21cda43744b81a0413509f19c",
+    "scripts/train_baseline.py": "f31fb7561df83c4b7ce0b1009aee534d1b7a040f46d433967d77d848b425fc48",
+    "src/data/dataset.py": "fa3c6e914fd65336ee70170ab72d8d78836560bb580ae77eafaaaebf90f138c9",
+    "src/data/splits.py": "d6714554a0e5f136db875f39da0ee3e4c3a40e1113496ffaf2466103aff012c9",
+    "src/models/video_classifiers.py": "ad6a276077a78aba74135e5ed2906dc42381e84e0e456c7c5c146cd6febda304",
+    "src/training/engine.py": "f153d5f338c52ba5cb086cbce7fb3ec152b4ba7e4b9dab48713cd1a7a7ee3f4f",
+    "src/evaluation/metrics.py": "9990022e6f5b040882622287f02032c38a94d2c9922e512bb740ee008e6519e0"
+  },
+  "log": "results/experiments/baseline_frames/contiguous_f16_seed42/training.log"
+}
+OUTPUT:
+device=cuda; train=712; val=214; classes=10
+epoch 01 | train loss 1.1661 acc 0.671 | val loss 0.6292 acc 0.879 macro-F1 0.867
+epoch 02 | train loss 0.3723 acc 0.937 | val loss 0.4158 acc 0.902 macro-F1 0.884
+epoch 03 | train loss 0.2279 acc 0.958 | val loss 0.3028 acc 0.930 macro-F1 0.919
+epoch 04 | train loss 0.1587 acc 0.983 | val loss 0.2594 acc 0.930 macro-F1 0.919
+epoch 05 | train loss 0.1145 acc 0.983 | val loss 0.2483 acc 0.907 macro-F1 0.893
+epoch 06 | train loss 0.1140 acc 0.978 | val loss 0.2573 acc 0.911 macro-F1 0.901
+epoch 07 | train loss 0.0905 acc 0.985 | val loss 0.2399 acc 0.902 macro-F1 0.889
+epoch 08 | train loss 0.0741 acc 0.990 | val loss 0.2119 acc 0.921 macro-F1 0.909
+epoch 09 | train loss 0.0704 acc 0.986 | val loss 0.1943 acc 0.939 macro-F1 0.931
+epoch 10 | train loss 0.0469 acc 0.996 | val loss 0.2156 acc 0.921 macro-F1 0.911
+Saved metrics: results/experiments/baseline_frames/contiguous_f16_seed42/metrics.json; best checkpoint: results/checkpoints/baseline_frames/contiguous_f16_seed42_best.pt
+EXIT_CODE: 0

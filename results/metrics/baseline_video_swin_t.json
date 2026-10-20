@@ -1,0 +1,79 @@
+{
+  "model": "video_swin_t",
+  "pretrained": true,
+  "weights": "Swin3D_T_Weights.KINETICS400_V1",
+  "freeze_backbone": true,
+  "classes": [
+    "Basketball",
+    "BasketballDunk",
+    "BodyWeightSquats",
+    "BreastStroke",
+    "FrontCrawl",
+    "JumpingJack",
+    "Lunges",
+    "PlayingGuitar",
+    "PlayingSitar",
+    "PushUps"
+  ],
+  "config": {
+    "model": "video_swin_t",
+    "video_root": "data/UCF-101",
+    "split_csv": "splits/split01_seed42.csv",
+    "epochs": 1,
+    "batch_size": 1,
+    "num_workers": 0,
+    "num_frames": 32,
+    "sampling": "uniform",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 42,
+    "device": "mps",
+    "cpu_threads": 8,
+    "no_pretrained": false,
+    "unfreeze_backbone": false,
+    "evaluate_test": false,
+    "out": "results/metrics/baseline_video_swin_t.json",
+    "confusion_out": "results/metrics/baseline_video_swin_t_val_confusion.csv",
+    "predictions_out": "results/metrics/baseline_video_swin_t_val_predictions.csv",
+    "checkpoint_out": "results/checkpoints/baseline_video_swin_t_best.pt"
+  },
+  "device": "mps",
+  "environment": {
+    "python": "3.11.9",
+    "torch": "2.14.1",
+    "torchvision": "0.29.1",
+    "gpu": null
+  },
+  "split_sha256": "70b9aec00d82f84bcd03ee9b2e7c556b0699712b62d753f628d9b1918c5dfa56",
+  "split_sizes": {
+    "train": 712,
+    "val": 214,
+    "test": 358
+  },
+  "selection": "highest val_accuracy, then lowest val_loss",
+  "checkpoint": "results/checkpoints/baseline_video_swin_t_best.pt",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.36110840746902356,
+      "train_accuracy": 0.9157303370786517,
+      "train_seconds": 153.97061633299745,
+      "val_loss": 0.12881267710836936,
+      "val_accuracy": 0.9579439252336449,
+      "val_macro_f1": 0.9544287088181328,
+      "val_seconds": 48.412610917002894
+    }
+  ],
+  "best_val_epoch": {
+    "epoch": 1,
+    "train_loss": 0.36110840746902356,
+    "train_accuracy": 0.9157303370786517,
+    "train_seconds": 153.97061633299745,
+    "val_loss": 0.12881267710836936,
+    "val_accuracy": 0.9579439252336449,
+    "val_macro_f1": 0.9544287088181328,
+    "val_seconds": 48.412610917002894
+  },
+  "test": null,
+  "status": "completed"
+}

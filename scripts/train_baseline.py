@@ -49,7 +49,7 @@ def parse_args(argv=None):
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--weight-decay", type=float, default=1e-4)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--device", choices=["auto", "cuda", "cpu"], default="auto")
+    parser.add_argument("--device", choices=["auto", "cuda", "mps", "cpu"], default="auto")
     parser.add_argument("--cpu-threads", type=positive_int, default=min(8, os.cpu_count() or 1))
     parser.add_argument("--no-pretrained", action="store_true", help="offline debugging only")
     parser.add_argument("--unfreeze-backbone", action="store_true")
@@ -95,9 +95,20 @@ def write_predictions(path, samples, target, pred, names):
 def main(argv=None):
     args = parse_args(argv)
     if args.device == "cuda" and not torch.cuda.is_available():
-        raise RuntimeError("CUDA is unavailable. Run outside the agent sandbox with CUDA-enabled PyTorch, or use --device cpu.")
-    device = torch.device("cuda" if args.device == "auto" and torch.cuda.is_available() else
-                          "cpu" if args.device == "auto" else args.device)
+        raise RuntimeError("CUDA is unavailable.")
+
+    if args.device == "mps" and not torch.backends.mps.is_available():
+        raise RuntimeError("MPS is unavailable.")
+
+    if args.device == "auto":
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        elif torch.backends.mps.is_available():
+            device = torch.device("mps")
+        else:
+            device = torch.device("cpu")
+    else:
+        device = torch.device(args.device)
     torch.set_num_threads(args.cpu_threads)
 
     rows = read_csv(args.split_csv)

@@ -21,7 +21,7 @@ from src.data.splits import assert_no_group_overlap, check_files_exist, read_csv
 
 DATASET_REVISION = "04d4e5ca1dc93606cb58752b0c08331e598743a4"
 DEFAULT_URL = f"https://huggingface.co/datasets/quchenyuan/UCF101-ZIP/resolve/{DATASET_REVISION}/UCF-101.zip"
-ARCHIVE_SHA256 = "eb77e54dfafd9c77e7b086f5e5ef7738cabd16a701b3f5c301a1f6c81fc4756e"
+ARCHIVE_SHA256 = "2c171cc4cd0304b274907c8e8f50f4dba88570629b2871abac5c8b18174487cd"
 
 
 def sha256(path):

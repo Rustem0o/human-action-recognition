@@ -1,0 +1,11 @@
+truth\pred,Basketball,BasketballDunk,BodyWeightSquats,BreastStroke,FrontCrawl,JumpingJack,Lunges,PlayingGuitar,PlayingSitar,PushUps
+Basketball,35,0,0,0,0,0,0,0,0,0
+BasketballDunk,0,37,0,0,0,0,0,0,0,0
+BodyWeightSquats,0,0,24,0,0,3,3,0,0,0
+BreastStroke,0,0,0,27,1,0,0,0,0,0
+FrontCrawl,0,0,0,4,33,0,0,0,0,0
+JumpingJack,0,0,0,0,0,37,0,0,0,0
+Lunges,1,0,1,0,0,0,35,0,0,0
+PlayingGuitar,0,0,0,0,0,0,0,43,0,0
+PlayingSitar,0,0,0,0,0,0,0,0,44,0
+PushUps,0,0,0,0,0,0,0,0,0,30
